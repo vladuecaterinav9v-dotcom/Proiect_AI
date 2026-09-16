@@ -5,157 +5,144 @@ from dotenv import load_dotenv
 
 # 1. Configurare pagină
 load_dotenv()
-st.set_page_config(page_title="Social Media AI Generator", page_icon="🎨", layout="wide")
+st.set_page_config(page_title="LinkedIn AI Assistant", page_icon="💼", layout="wide")
 
 # 2. Titlu
-st.title("📲 Generator AI: Text Extins & Imagini Social Media")
+st.title("💼 Generator AI: Postări & Imagini LinkedIn (Pro)")
 st.caption("Proiect de practică - Facultatea de Automatică și Calculatoare")
 st.markdown("---")
 
 # 3. Meniu Lateral
-st.sidebar.header("⚙️ Setări Conținut")
+st.sidebar.header("⚙️ Setări Conținut LinkedIn")
 
 tip_continut = st.sidebar.selectbox(
-    "Formatul dorit:",
-    ["Postare Facebook", "Story Instagram (3 Cadre)", "Postare LinkedIn", "Caption TikTok / Reel"]
+    "Formatul postării:",
+    [
+        "Opinie despre industrie (Thought Leadership)",
+        "Realizare profesională / Certificare",
+        "Anunț de angajare / Recrutare",
+        "Studiu de caz / Prezentare Proiect"
+    ]
 )
 
 ton_voce = st.sidebar.select_slider(
     "Tonul vorbirii:",
-    options=["Profesional", "Informativ", "Prietenos / Entuziast", "Amuzant", "Inspirațional"]
+    options=["Profesional & Analitic", "Corporate", "Motivațional & Leadership", "Academic & Tehnic"]
 )
 
-include_hashtags = st.sidebar.checkbox("Hashtag-uri inteligente", value=True)
-include_emojis = st.sidebar.checkbox("Include Emoji-uri", value=True)
-generare_imagine = st.sidebar.checkbox("Generează Imagine AI", value=True)
+include_hashtags = st.sidebar.checkbox("Hashtag-uri profesionale", value=True)
+include_emojis = st.sidebar.checkbox("Include Emoji-uri de business", value=True)
+generare_imagine = st.sidebar.checkbox("Generează Imagine Corporate AI", value=True)
 
 # 4. Zona de Introducere Subiect
-st.subheader("1. Despre ce este postarea?")
-subiect = st.text_area(
-    "Descrie pe scurt ideea, produsul sau evenimentul:",
-    placeholder="Exemplu: Târgul de Crăciun din Craiova - luminițe spectaculoase, patinoar și ciocolată caldă...",
-    height=90
-)
+st.subheader("1. Detalii despre postarea de LinkedIn")
 
-cuvinte_cheie = st.text_input("Locație / Cuvinte cheie suplimentare (Opțional):", placeholder="Ex: Craiova, Crăciun, Magie")
+col_input1, col_input2 = st.columns([2, 1])
 
-# 5. Funcție avansată de generare cu adaptare reală a tonului și text extins
-def genereaza_continut_avansat(subiect, tip, ton, hashtags, emojis, cheie):
-    # Dicționar de stiluri dinamice în funcție de TON
+with col_input1:
+    subiect = st.text_area(
+        "Descrie pe scurt subiectul, ideea sau realizarea ta:",
+        placeholder="Exemplu: Am finalizat un proiect de inteligență artificială care optimizează postările pentru social media folosind Streamlit și Python...",
+        height=100
+    )
+
+with col_input2:
+    rol_companie = st.text_input("Rolul tău / Domeniul (Opțional):", placeholder="Ex: Student Automatică / Data Scientist")
+    cuvinte_cheie = st.text_input("Cuvinte cheie / Tehnologii (Opțional):", placeholder="Ex: Python, AI, Streamlit, Innovation")
+
+# 5. Funcție avansată adaptată special pentru LinkedIn
+def genereaza_continut_linkedin(subiect, tip, ton, hashtags, emojis, cheie, rol):
     stiluri_ton = {
-        "Profesional": {
-            "hook": "Anunț important și oportunitate deosebită:",
-            "intro": "Avem plăcerea de a vă aduce în atenție o experiență de referință:",
-            "tranzit": "Printre elementele definitorii ale acestei inițiative se numără:",
-            "cta": "Vă invităm să consultați detaliile complete și să vă alăturați acestei experiențe.",
-            "emo_prefix": "💼 " if emojis else ""
+        "Profesional & Analitic": {
+            "hook": "O perspectivă valoroasă asupra modului în care evoluează domeniul nostru:",
+            "intro": "Analizând tendințele actuale, devine clar că inovația redefinește standardele din industrie.",
+            "tranzit": "Iată 3 concluzii principale pe care le putem extrage:",
+            "cta": "Care este opinia ta despre această abordare? Aștept cu interes ideile tale în comentarii.",
+            "emo_prefix": "📊 " if emojis else ""
         },
-        "Informativ": {
-            "hook": "Ghid util & Detalii esențiale:",
-            "intro": "Tot ce trebuie să știi în acest moment despre următoarea recomandare:",
-            "tranzit": "Iată reperele principale pe care trebuie să le iei în calcul:",
-            "cta": "Salvează această postare pentru a avea la îndemână toate informațiile utile!",
-            "emo_prefix": "📌 " if emojis else ""
+        "Corporate": {
+            "hook": "Ne bucurăm să împărtășim o nouă etapă importantă în activitatea noastră:",
+            "intro": "Dedicarea și strategia sunt motoarele principale ale unei dezvoltări sustenabile.",
+            "tranzit": "Elementele cheie care au contribuit la acest rezultat:",
+            "cta": "Vă invităm să urmăriți evoluția proiectului și să ne conectați pentru viitoare colaborări.",
+            "emo_prefix": "🏢 " if emojis else ""
         },
-        "Prietenos / Entuziast": {
-            "hook": "Pregătește-te de ceva cu adevărat special! 🎉",
-            "intro": "Nu mai putem ține secretul! Trebuia neapărat să împărtășim asta cu voi:",
-            "tranzit": "Iată ce ne încântă cel mai tare și de ce nu trebuie să ratezi așa ceva:",
-            "cta": "Etichetează în comentarii persoana cu care vrei să mergi neapărat!",
+        "Motivațional & Leadership": {
+            "hook": "Succesul nu este o destinație, ci un proces continuu de învățare și adaptare.",
+            "intro": "Fiecare provocare întâlnită în proiecte reprezintă o oportunitate de creștere profesională.",
+            "tranzit": "Lecțiile principale pe care le-am învățat pe parcurs:",
+            "cta": "Tu ce provocare ai transformat recent într-o oportunitate? Lasă un comentariu mai jos!",
             "emo_prefix": "🚀 " if emojis else ""
         },
-        "Amuzant": {
-            "hook": "Ai spus că stai acasă weekendul ăsta? Mai gândește-te o dată! 😂",
-            "intro": "Avem planul perfect care o să-ți dea peste cap toate scuzele de a nu ieși din casă:",
-            "tranzit": "Motivele oficiale pentru care merită să lași canapeaua deoparte:",
-            "cta": "Lasă un comentariu dacă și tu ai nevoie de o pauză memorabilă!",
-            "emo_prefix": "😎 " if emojis else ""
-        },
-        "Inspirațional": {
-            "hook": "Momentele speciale sunt cele pe care le păstrăm în suflet. ✨",
-            "intro": "Există locuri și momente care reușesc să transforme o simplă zi într-o amintire de poveste:",
-            "tranzit": "Frumusețea acestei experiențe constă în detalii unice:",
-            "cta": "Bucură-te de fiecare clipă și creează-ți propriile amintiri speciale.",
-            "emo_prefix": "🌟 " if emojis else ""
+        "Academic & Tehnic": {
+            "hook": "Studiu de caz tehnic & Implementare practică:",
+            "intro": "Soluțiile moderne necesită o arhitectură bine structurată și utilizarea eficientă a tehnologiilor actuale.",
+            "tranzit": "Aspecte tehnice definitorii ale implementării:",
+            "cta": "Pentru mai multe detalii tehnice sau întrebări despre arhitectură, vă stau la dispoziție.",
+            "emo_prefix": "💡 " if emojis else ""
         }
     }
 
     s = stiluri_ton[ton]
     e = s["emo_prefix"]
+    context_rol = f" Din perspectiva unui **{rol}**:" if rol else ""
 
-    if tip == "Story Instagram (3 Cadre)":
-        rezultat = f"""
-📸 **CADRUL 1 (Atenție & Titlu):**
-{e}{s['hook']}
-👉 {s['intro']}
-Swipe up / Glisează pentru detalii!
+    # Construcție structură postare LinkedIn
+    titlu = f"{e}**{s['hook']}**\n\n"
+    intro_p = f"{s['intro']}{context_rol}\n\n📌 **Context:** {subiect}\n\n"
+    
+    body_p = (
+        f"**{s['tranzit']}**\n"
+        f"1. **Eficiență & Structură:** Focus pe soluții scalabile și rezultate concrete.\n"
+        f"2. **Implementare Practică:** Utilizarea celor mai bune practici din industrie.\n"
+        f"3. **Impact & Valoare:** Crearea de valoare adăugată pentru utilizatori și comunitate.\n\n"
+        f"Această abordare demonstrează importanța adaptării continue la noile cerințe din mediul profesional."
+    )
+    
+    cta_p = f"\n\n💬 **{s['cta']}**"
+    
+    rezultat = titlu + intro_p + body_p + cta_p
 
-📸 **CADRUL 2 (Experiență & Detalii Extinse):**
-{'✨ ' if emojis else ''}{subiect}
-{s['tranzit']}
-• Atmosferă de neuitat și momente unice
-• Activități concepute special pentru public
-• Trăiri pe care merită să le experimentezi în direct!
-
-📸 **CADRUL 3 (Call to Action & Interacțiune):**
-{'🎯 ' if emojis else ''}{s['cta']}
-Ești gata? Trimite un mesaj privat sau răspunde la acest Story!
-        """
-    else:
-        # Descriere extinsă pentru Facebook / LinkedIn / TikTok
-        titlu = f"{e}**{s['hook']}**\n\n"
-        intro_paragraph = f"{s['intro']}\n👉 **{subiect}**\n\n"
-        
-        body_paragraph = (
-            f"{s['tranzit']}\n"
-            f"• **Atmosferă & Design:** O organizare atentă, gândită să creeze o experiență vizuală și emoțională deosebită.\n"
-            f"• **Puncte de interes:** Fiecare detaliu a fost conceput pentru a oferi momente memorabile tuturor vizitatorilor.\n"
-            f"• **Nivel de energie:** Un mediu ideal pentru a te deconecta, a socializa și a te bucura de tot ce este mai frumos.\n\n"
-            f"Această inițiativă își propune să aducă împreună comunitatea și să ofere un spațiu de conectare autentică. Fiecare vizită devine astfel o poveste de neuitat."
-        )
-        
-        cta_paragraph = f"\n\n💬 **{s['cta']}**"
-        
-        rezultat = titlu + intro_paragraph + body_paragraph + cta_paragraph
-
-    # Hashtag-uri dinamice
+    # Hashtag-uri specifice LinkedIn
     tags_text = ""
     if hashtags:
-        cuvinte_importante = [w.strip(",.!?").capitalize() for w in subiect.split() if len(w) > 3]
         custom_tags = [f"#{ck.strip().replace(' ', '')}" for ck in cheie.split(",") if ck.strip()]
-        
-        tags_generat = [f"#{w}" for w in cuvinte_importante[:5]] + custom_tags + ["#Romania", "#SocialMedia", "#Trending", "#InstaGood"]
-        tags_text = "\n\n🏷️ **Hashtag-uri relevante:**\n" + " ".join(list(set(tags_generat))[:8])
+        tags_generat = custom_tags + ["#LinkedIn", "#Business", "#Leadership", "#CareerGrowth", "#Innovation", "#TechIndustry"]
+        tags_text = "\n\n🏷️ **Hashtag-uri LinkedIn:**\n" + " ".join(list(set(tags_generat))[:8])
 
     return rezultat, tags_text
 
 # 6. Generare & Afișare
 st.markdown("---")
-if st.button("✨ Generează Postarea Extinsă & Imaginea AI", type="primary", use_container_width=True):
+if st.button("🚀 Generează Postare LinkedIn & Imagine Corporate", type="primary", use_container_width=True):
     if not subiect.strip():
-        st.warning("⚠️ Te rog să scrii mai întâi un scurt subiect!")
+        st.warning("⚠️ Te rog să introduci detalii despre subiectul postării!")
     else:
-        with st.spinner("AI-ul adaptează tonul și generează conținutul extins..."):
-            text_generat, tags = genereaza_continut_avansat(subiect, tip_continut, ton_voce, include_hashtags, include_emojis, cuvinte_cheie)
+        with st.spinner("AI-ul redactează postarea profesională pentru LinkedIn..."):
+            text_generat, tags = genereaza_continut_linkedin(
+                subiect, tip_continut, ton_voce, include_hashtags, include_emojis, cuvinte_cheie, rol_companie
+            )
             
-            st.success(f"✅ Postare generată cu stilul: {ton_voce}!")
+            st.success(f"✅ Postare optimizată pentru LinkedIn cu stilul: {ton_voce}!")
             
-            # Afișare pe 2 coloane
             col_text, col_img = st.columns([3, 2])
             
             with col_text:
-                st.markdown("### 📝 Text Generat Extins:")
+                st.markdown("### 📝 Text Generat pentru LinkedIn:")
                 st.code(text_generat, language="text")
                 if tags:
                     st.markdown(tags)
 
             with col_img:
                 if generare_imagine:
-                    st.markdown("### 🖼️ Imagine AI Generată:")
-                    prompt_encoded = urllib.parse.quote(f"{subiect}, highly detailed, cinematic lighting, photorealistic, 8k resolution")
+                    st.markdown("### 🖼️ Imagine Corporate AI:")
+                    # Prompt ajustat pentru stil profesional / business / office
+                    prompt_encoded = urllib.parse.quote(
+                        f"professional business concept, corporate office, modern workspace, {subiect}, clean design, high quality, photorealistic, 8k resolution"
+                    )
                     image_url = f"https://image.pollinations.ai/prompt/{prompt_encoded}?width=800&height=800&nologo=true"
                     
-                    st.image(image_url, caption="Imagine creată în timp real de AI", use_container_width=True)
+                    st.image(image_url, caption="Imagine profesională creată de AI", use_container_width=True)
 
 # Footer
 st.markdown("---")
