@@ -50,57 +50,64 @@ with col_input2:
     rol_companie = st.text_input("Rolul tău / Domeniul (Opțional):", placeholder="Ex: Student Automatică / Data Scientist")
     cuvinte_cheie = st.text_input("Cuvinte cheie / Tehnologii (Opțional):", placeholder="Ex: Python, AI, Streamlit, Innovation")
 
-# 5. Funcție avansată adaptată special pentru LinkedIn
+# 5. Funcție avansată adaptată special pentru LinkedIn cu tonuri net diferite
 def genereaza_continut_linkedin(subiect, tip, ton, hashtags, emojis, cheie, rol):
-    stiluri_ton = {
-        "Profesional & Analitic": {
-            "hook": "O perspectivă valoroasă asupra modului în care evoluează domeniul nostru:",
-            "intro": "Analizând tendințele actuale, devine clar că inovația redefinește standardele din industrie.",
-            "tranzit": "Iată 3 concluzii principale pe care le putem extrage:",
-            "cta": "Care este opinia ta despre această abordare? Aștept cu interes ideile tale în comentarii.",
-            "emo_prefix": "📊 " if emojis else ""
-        },
-        "Corporate": {
-            "hook": "Ne bucurăm să împărtășim o nouă etapă importantă în activitatea noastră:",
-            "intro": "Dedicarea și strategia sunt motoarele principale ale unei dezvoltări sustenabile.",
-            "tranzit": "Elementele cheie care au contribuit la acest rezultat:",
-            "cta": "Vă invităm să urmăriți evoluția proiectului și să ne conectați pentru viitoare colaborări.",
-            "emo_prefix": "🏢 " if emojis else ""
-        },
-        "Motivațional & Leadership": {
-            "hook": "Succesul nu este o destinație, ci un proces continuu de învățare și adaptare.",
-            "intro": "Fiecare provocare întâlnită în proiecte reprezintă o oportunitate de creștere profesională.",
-            "tranzit": "Lecțiile principale pe care le-am învățat pe parcurs:",
-            "cta": "Tu ce provocare ai transformat recent într-o oportunitate? Lasă un comentariu mai jos!",
-            "emo_prefix": "🚀 " if emojis else ""
-        },
-        "Academic & Tehnic": {
-            "hook": "Studiu de caz tehnic & Implementare practică:",
-            "intro": "Soluțiile moderne necesită o arhitectură bine structurată și utilizarea eficientă a tehnologiilor actuale.",
-            "tranzit": "Aspecte tehnice definitorii ale implementării:",
-            "cta": "Pentru mai multe detalii tehnice sau întrebări despre arhitectură, vă stau la dispoziție.",
-            "emo_prefix": "💡 " if emojis else ""
-        }
-    }
+    context_rol = f" (în calitate de {rol})" if rol else ""
 
-    s = stiluri_ton[ton]
-    e = s["emo_prefix"]
-    context_rol = f" Din perspectiva unui **{rol}**:" if rol else ""
+    # Fiecare ton are un stil de scriere și o structură complet diferită
+    if ton == "Profesional & Analitic":
+        emo = "📊 " if emojis else ""
+        titlu = f"{emo}**ANALIZĂ DE IMPACT: Modul în care inovația schimbă regulile**\n\n"
+        intro_p = f"Analizând evoluția recentă legată de **{subiect}**{context_rol}, observăm o nevoie clară de eficientizare și optimizare în industrie.\n\n"
+        body_p = (
+            "📈 **3 Constatări Analitice Cheie:**\n"
+            "• **Optimizarea proceselor:** Reducerea timpului de execuție prin automatizare inteligentă.\n"
+            "• **Decizii bazate pe date:** Eliminarea presupunerilor și focalizarea pe metrice concrete.\n"
+            "• **Scalabilitate:** Construirea unei baze solide pentru creștere pe termen lung.\n\n"
+            "Concluzia? Adaptarea rapidă la noile tehnologii este singurul avantaj competitiv sustenabil."
+        )
+        cta_p = "\n\n💬 **Care este metrica principală pe care o urmărești în proiectele tale? Aștept părerea ta în comentarii.**"
 
-    # Construcție structură postare LinkedIn
-    titlu = f"{e}**{s['hook']}**\n\n"
-    intro_p = f"{s['intro']}{context_rol}\n\n📌 **Context:** {subiect}\n\n"
-    
-    body_p = (
-        f"**{s['tranzit']}**\n"
-        f"1. **Eficiență & Structură:** Focus pe soluții scalabile și rezultate concrete.\n"
-        f"2. **Implementare Practică:** Utilizarea celor mai bune practici din industrie.\n"
-        f"3. **Impact & Valoare:** Crearea de valoare adăugată pentru utilizatori și comunitate.\n\n"
-        f"Această abordare demonstrează importanța adaptării continue la noile cerințe din mediul profesional."
-    )
-    
-    cta_p = f"\n\n💬 **{s['cta']}**"
-    
+    elif ton == "Corporate":
+        emo = "🏢 " if emojis else ""
+        titlu = f"{emo}**ANUNȚ OFICIAL | Dezvoltare & Inovație**\n\n"
+        intro_p = f"Suntem încântați să împărtășim o nouă etapă importantă în activitatea noastră: **{subiect}**{context_rol}.\n\n"
+        body_p = (
+            "Atingerea acestui obiectiv confirmă angajamentul nostru pentru excelență și profesionalism. "
+            "Rezultatele obținute reflectă efortul continuu și alinierea la cele mai înalte standarde din industrie.\n\n"
+            "Pilonii strategici ai acestei inițiative:\n"
+            "1️⃣ **Standardizare:** Aliniere la bunele practici din domeniu.\n"
+            "2️⃣ **Colaborare:** Integrare eficientă între resurse și tehnologie.\n"
+            "3️⃣ **Sustenabilitate:** Impact pozitiv și valoare pe termen lung."
+        )
+        cta_p = "\n\n🤝 **Vă invităm să ne urmăriți pentru viitoare noutăți și oportunități de colaborare.**"
+
+    elif ton == "Motivațional & Leadership":
+        emo = "🚀 " if emojis else ""
+        titlu = f"{emo}**Succesul nu este o întâmplare, ci o alegere zilnică!**\n\n"
+        intro_p = f"Când am început lucrul la **{subiect}**{context_rol}, am înțeles că cele mai mari provocări aduc cele mai valoroase lecții.\n\n"
+        body_p = (
+            "Nu este vorba doar despre rezultatul final, ci despre cine devii pe parcurs! 🔥\n\n"
+            "✨ **3 Lecții de leadership învățate pe parcurs:**\n"
+            "• **Pasiune & Perseverență:** Nimic nu înlocuiește munca consecventă.\n"
+            "• **Depășirea limitelor:** Zona de confort este inamicul progresului.\n"
+            "• **Învățare continuă:** Fiecare eroare este doar un pas spre soluția corectă."
+        )
+        cta_p = "\n\n👇 **Care a fost cea mai mare provocare pe care ai transformat-o într-o reușită anul acesta? Lasă un comentariu!**"
+
+    else:  # Academic & Tehnic
+        emo = "💡 " if emojis else ""
+        titlu = f"{emo}**[TECHNICAL CASE STUDY] Arhitectură & Implementare**\n\n"
+        intro_p = f"Prezentare tehnică referitoare la implementarea proiectului: **{subiect}**{context_rol}.\n\n"
+        body_p = (
+            "⚙️ **Detalii Arhitecturale & Stack Tehnologic:**\n"
+            "• **Core:** Design modular axat pe performanță și timp de răspuns minim.\n"
+            "• **Procesare:** Algoritmi optimizați pentru manipularea eficientă a datelor.\n"
+            "• **UX/UI:** Interfață reactivă, complet decuplată de logica de backend.\n\n"
+            "🔍 **Rezultat tehnic:** Optimizarea fluxului de date și asigurarea unei execuții stabile în mediu de producție."
+        )
+        cta_p = "\n\n🛠️ **Pentru întrebări legate de arhitectură sau detalii de implementare, vă stau la dispoziție.**"
+
     rezultat = titlu + intro_p + body_p + cta_p
 
     # Hashtag-uri specifice LinkedIn
@@ -140,14 +147,20 @@ if st.button("🚀 Generează Postare LinkedIn & Imagine Corporate", type="prima
 
             with col_img:
                 if generare_imagine:
-                    st.markdown("### 🖼️ Imagine Corporate AI:")
-                    # Prompt ajustat pentru stil profesional / business / office
-                    prompt_encoded = urllib.parse.quote(
-                        f"professional business concept, corporate office, modern workspace, {subiect}, clean design, high quality, photorealistic, 8k resolution"
-                    )
-                    image_url = f"https://image.pollinations.ai/prompt/{prompt_encoded}?width=800&height=800&nologo=true"
+                    st.markdown("### 🖼️ Imagine Corporate AI (Fotorealistă):")
                     
-                    st.image(image_url, caption="Imagine profesională creată de AI", use_container_width=True)
+                    # Prompt optimizat pentru fotorealism extrem
+                    prompt_fotorealist = (
+                        f"A real realistic photograph of {subiect}, professional office environment, "
+                        f"authentic corporate setting, shot on 35mm lens, f/2.8 aperture, soft natural lighting, "
+                        f"DSLR camera quality, highly detailed, photorealistic, cinematic depth of field"
+                    )
+                    prompt_encoded = urllib.parse.quote(prompt_fotorealist)
+                    
+                    # Generare cu modelul Flux pentru calitate fotorealistă
+                    image_url = f"https://image.pollinations.ai/prompt/{prompt_encoded}?width=800&height=800&nologo=true&model=flux"
+                    
+                    st.image(image_url, caption="Imagine fotorealistă generată de AI (Model: Flux)", use_container_width=True)
 
 # Footer
 st.markdown("---")
