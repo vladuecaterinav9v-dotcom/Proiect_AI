@@ -132,6 +132,11 @@ if st.button("🚀 Generează Postare LinkedIn & Imagine Corporate", type="prima
                 st.code(text_generat, language="text")
                 if tags:
                     st.markdown(tags)
+                
+                # Varianta 2: Buton direct de Share / Deschidere LinkedIn
+                st.markdown("---")
+                st.link_button("🌐 Deschide LinkedIn & Postează", "https://www.linkedin.com/feed/", use_container_width=True)
+                st.caption("💡 Apasă butonul de copiere din colțul casetei de text, deschide LinkedIn cu butonul de mai sus și dă Paste (Ctrl+V)!")
 
             with col_img:
                 if generare_imagine:
